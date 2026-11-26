@@ -4,12 +4,14 @@
 
 # One-Line Office Joke Laugh-Off
 
-One original one-line office joke: the office printer, an expert in passive aggression, waits for the worst possible moment to jam.
+> Our office printer has a PhD in passive aggression: it only jams when the deadline is in five minutes and the boss is watching.
 
-## Run it
+Every office has that printer. It prints fine all week, then — the moment a deadline tightens and a manager drifts over — it develops opinions. This entry is that moment, in one line (127 characters).
+
+## How to run
 
 ```sh
 python3 main.py
 ```
 
-Writes one entry (127 characters, UTF-8) to `$MAKEFUN_OUTPUT_DIR/entry.txt`, or `/output/entry.txt` if that variable is unset. Python 3 standard library only, no network, deterministic.
+The script validates the line (non-empty, at most 200 characters, no line breaks, UTF-8) and writes it, with no trailing newline, to `entry.txt` under `$MAKEFUN_OUTPUT_DIR` (or `/output` by default). Standard library only, no network, deterministic output.

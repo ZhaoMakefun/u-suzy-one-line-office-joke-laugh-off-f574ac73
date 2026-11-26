@@ -1,36 +1,36 @@
 #!/usr/bin/env python3
-"""One-Line Office Joke Laugh-Off entry.
-
-Writes one original entry (at most 200 characters) to
-$MAKEFUN_OUTPUT_DIR/entry.txt (or /output/entry.txt).
-
-One original one-line office joke: the office printer, an expert in passive aggression, waits for the worst possible moment to jam.
-"""
+# One-Line Office Joke Laugh-Off.
+# The joke: the office printer has earned a PhD in passive aggression.
+# It never jams on a quiet Tuesday — only when the deadline is five
+# minutes away and the boss happens to be standing right behind you.
 
 import os
 import sys
 
-ENTRY = 'Our office printer has a PhD in passive aggression: it only jams when the deadline is in five minutes and the boss is watching.'
 
-MAX_CHARS = 200
+JOKE = "Our office printer has a PhD in passive aggression: it only jams when the deadline is in five minutes and the boss is watching."
+CEILING = 200
 
 
-def main() -> int:
-    text = ENTRY.strip()
-    # Gate check: 1-200 characters, UTF-8, not only whitespace.
-    if not text or len(text) > MAX_CHARS:
-        print(f"entry invalid: {len(text)} chars", file=sys.stderr)
-        return 1
-    if "\n" in text or "\r" in text:
-        print("entry invalid: must be a single line", file=sys.stderr)
-        return 1
-    text.encode("utf-8")  # raises if not encodable, which it always is
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
-    os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
-        f.write(text)
-    return 0
+def emit_entry():
+    line = JOKE.strip()
+    problems = []
+    if not line:
+        problems.append("empty")
+    if len(line) > CEILING:
+        problems.append(f"too long ({len(line)} > {CEILING})")
+    if set(line) & {"\n", "\r"}:
+        # A one-liner must stay on one line — any break fails the entry.
+        problems.append("contains a line break")
+    if problems:
+        print("entry rejected:", "; ".join(problems), file=sys.stderr)
+        sys.exit(1)
+    line.encode("utf-8")
+    folder = os.getenv("MAKEFUN_OUTPUT_DIR") or "/output"
+    os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(folder, "entry.txt"), "w", encoding="utf-8") as out:
+        out.write(line)
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    emit_entry()
